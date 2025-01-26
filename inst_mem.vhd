@@ -6,7 +6,7 @@ use work.inst_mem_pkg.all;
 
 entity InstructionMemory is
 	generic (
-		file_path : string := "program.hex"
+		file_path : string := "C:/program.hex"
 	);
 
     port (
