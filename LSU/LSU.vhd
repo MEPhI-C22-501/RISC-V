@@ -26,7 +26,8 @@ entity LSU is
         o_write_data_memory: out std_logic_vector (31 downto 0);
         o_rd_csr : out std_logic_vector (4 downto 0);
         o_addr_spec_reg_csr : out std_logic_vector (11 downto 0);  --Адрес берем из регестра (сделал)
-		  o_program_counter : in std_logic_vector(15 downto 0)
+		  o_program_counter : out std_logic_vector(15 downto 0);
+		  o_program_counter_write_enable : out std_logic
         );
 
 end entity;

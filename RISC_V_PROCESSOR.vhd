@@ -67,7 +67,8 @@ architecture behavioral of RISC_V_PROCESSOR is
         o_write_data_memory: out std_logic_vector (31 downto 0);
         o_rd_csr : out std_logic_vector (4 downto 0);
         o_addr_spec_reg_csr : out std_logic_vector (11 downto 0);  --Адрес берем из регестра (сделал)
-		  o_program_counter : in std_logic_vector(15 downto 0)
+		  o_program_counter : out std_logic_vector(15 downto 0);
+		  o_program_counter_write_enable : out std_logic
 	 ); 
   end component;
   
@@ -264,7 +265,8 @@ begin
     o_write_data_memory => write_lsu_to_lsumem, --
     o_rd_csr => regfile_number, --
 	 o_addr_spec_reg_csr => addr_lsu_to_CSR,--
-	 o_program_counter => PC_lsu_to_regfile --
+	 o_program_counter => PC_lsu_to_regfile, --
+	 o_program_counter_write_enable 	=> PC_write_enable
 	 
   );			
   
