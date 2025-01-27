@@ -16,7 +16,7 @@ end entity RISC_V_PROCESSOR;
 
 architecture behavioral of RISC_V_PROCESSOR is
 
-  component command_decoder_v1 
+    component command_decoder_v1 
     port ( 
 		  i_clk         	: in std_logic;
 		  i_rst         	: in std_logic;
@@ -35,7 +35,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 	 ); 
   end component;
   
-  component ALU
+    component ALU
     port ( 
          i_first_operand	: in std_logic_vector(31 downto 0);
 			i_second_operand 	: in std_logic_vector(31 downto 0);
@@ -47,8 +47,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 	 ); 
   end component;
   
-  
-  component LSU
+    component LSU
      port (
         i_clk, i_rst, i_write_enable_decoder : in std_logic;
         i_opcode_decoder, i_opcode_write_decoder : in std_logic_vector (16 downto 0);
@@ -72,7 +71,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 	 ); 
   end component;
   
-  component LSUMEM 
+    component LSUMEM 
 		port ( 
 		  
         i_clk, i_rst, i_write_enable_LSU : in std_logic;
@@ -85,7 +84,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 		);
 	end component;
 		
-  component RegisterFile 
+    component RegisterFile 
     port ( 
 			i_clk        : in     std_logic;
 			i_rst                  : in     std_logic;
@@ -100,7 +99,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 	 ); 
   end component;
   
-  component InstructionMemory
+    component InstructionMemory
 		generic (
 			file_path : string := "C:/program.hex"
 	);
@@ -113,7 +112,7 @@ architecture behavioral of RISC_V_PROCESSOR is
     );
 	end component;
   
-   component DataMemory
+    component DataMemory
 		port (
         i_clk           : in  std_logic;
 		  i_rst           : in  std_logic;
@@ -211,22 +210,20 @@ begin
 	core_clock <= i_clk;
 	core_reset <= i_rst;
 
-
   decoder_inst : command_decoder_v1  port map ( 
-  
-	 i_clk           => core_clock,--
-    i_rst           => core_reset,--
-    i_instr         => instruction_command, --
-	 o_rs1           => instruction_rs1, --
-	 o_rs2           => instruction_rs2, --
-    o_imm           => instruction_imm, --
-	 o_rd            => instruction_rd, --
---	 o_read_to_LSU   => ,
-    o_write_to_LSU  => decoder_write_to_lsu, --
-    o_LSU_code      => lsu_code, --
-	 o_LSU_code_post => lsu_postcode,
-	 o_LSU_reg_or_memory_flag => src_decoder_to_lsu, --
-	 o_wb_result_src => wb_result_src--
+	i_clk           => core_clock,--
+	i_rst           => core_reset,--
+	i_instr         => instruction_command, --
+	o_rs1           => instruction_rs1, --
+	o_rs2           => instruction_rs2, --
+	o_imm           => instruction_imm, --
+	o_rd            => instruction_rd, --
+
+	o_write_to_LSU  => decoder_write_to_lsu, --
+	o_LSU_code      => lsu_code, --
+	o_LSU_code_post => lsu_postcode,
+	o_LSU_reg_or_memory_flag => src_decoder_to_lsu, --
+	o_wb_result_src => wb_result_src--
   );
 
   alu_inst : ALU port map (
@@ -332,9 +329,5 @@ begin
 	 
     o_result       => wb_result --
   );
-
-
-	
-
 
 end architecture behavioral;
