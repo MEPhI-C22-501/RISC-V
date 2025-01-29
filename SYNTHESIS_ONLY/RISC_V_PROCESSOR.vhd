@@ -25,7 +25,6 @@ architecture behavioral of RISC_V_PROCESSOR is
 		  o_rs2         	: out std_logic_vector(4 downto 0);
 		  o_imm		    	: out std_logic_vector(11 downto 0);
 		  o_rd          	: out std_logic_vector(4 downto 0);
-	--	  o_read_to_LSU 	: out std_logic;
 		  o_write_to_LSU 	: out std_logic;
 		  o_LSU_code		: out std_logic_vector(16 downto 0);
 		  o_LSU_code_post	: out std_logic_vector(16 downto 0);
@@ -55,8 +54,8 @@ architecture behavioral of RISC_V_PROCESSOR is
         i_rd_ans : in std_logic_vector (31 downto 0);
         i_imm_decoder : in std_logic_vector (11 downto 0);
         i_rs_csr : in registers_array;
-        i_spec_reg_or_memory_decoder : in std_logic; --Если 1, то чтение из спец регистров, если 0 то из памяти (сделал)
-        i_program_counter_csr : in std_logic_vector (15 downto 0); --Просто получаю (сделал)
+        i_spec_reg_or_memory_decoder : in std_logic; 
+        i_program_counter_csr : in std_logic_vector (15 downto 0); 
 
         o_opcode_alu : out std_logic_vector (16 downto 0);
         o_rs_csr : out registers_array;
@@ -65,7 +64,7 @@ architecture behavioral of RISC_V_PROCESSOR is
         o_addr_memory: out std_logic_vector (15 downto 0);
         o_write_data_memory: out std_logic_vector (31 downto 0);
         o_rd_csr : out std_logic_vector (4 downto 0);
-        o_addr_spec_reg_csr : out std_logic_vector (11 downto 0);  --Адрес берем из регестра (сделал)
+        o_addr_spec_reg_csr : out std_logic_vector (11 downto 0);  
 		  o_program_counter : out std_logic_vector(15 downto 0);
 		  o_program_counter_write_enable : out std_logic
 	 ); 
@@ -142,7 +141,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 			i_datamem_result   	: in  STD_LOGIC_VECTOR(31 downto 0); 
 			i_CSR_result 			: in STD_LOGIC_VECTOR (31 downto 0);
 		  
-			i_result_src       	: in  STD_LOGIC_VECTOR(1 downto 0);  -- "00" - ALU; "01" - datamem; "10" - CSR  
+			i_result_src       	: in  STD_LOGIC_VECTOR(1 downto 0);  
 			o_result        		: out STD_LOGIC_VECTOR(31 downto 0)  
 		  
   );
