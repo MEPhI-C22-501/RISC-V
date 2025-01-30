@@ -37,8 +37,8 @@ architecture ALU_arch of ALU is
     constant SRA_OP    : std_logic_vector := "01000001010110011";
     constant OR_OP     : std_logic_vector := "00000001100110011";
     constant AND_OP    : std_logic_vector := "00000001110110011";
-    constant MUL_OP    : std_logic_vector := "00000011000110011";
-    constant MULH_OP   : std_logic_vector := "00000011010110011";
+    constant MUL_OP    : std_logic_vector := "00000010000110011";
+    constant MULH_OP   : std_logic_vector := "00000010010110011";
     constant MULHSU_OP : std_logic_vector := "00000010100110011";
     constant MULHU_OP  : std_logic_vector := "00000010110110011";
 
