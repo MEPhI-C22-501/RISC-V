@@ -142,7 +142,12 @@ begin
     end if;
 
     if (i_instr(6 downto 0) = "0000011" or i_instr(6 downto 0) = "0010011") then
-       o_imm <= i_instr(31 downto 20);
+		if (i_instr(31 downTo 25) = "0100000" and i_instr(14 downTo 12) = "101") then
+			o_imm(4 downTo 0) <= i_instr(24 downto 20);
+			o_imm(11 downto 5) <= (others => '0');
+		else
+			o_imm <= i_instr(31 downto 20);
+		end if;
     end if;
     
     if (i_instr(6 downto 0) = "0000011" or i_instr(6 downto 0) = "0010011") then
@@ -215,3 +220,4 @@ begin
   end if;
   end process;
 end rtl;
+
