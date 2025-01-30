@@ -62,7 +62,7 @@ BEGIN
 		address_aclr_a => "NONE",
 		clock_enable_input_a => "BYPASS",
 		clock_enable_output_a => "BYPASS",
-		init_file => "C:\RISC_V_TESTS\CSR.mif",
+		init_file => "C:/CSR.mif",
 		intended_device_family => "Cyclone 10 LP",
 		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
 		lpm_type => "altsyncram",

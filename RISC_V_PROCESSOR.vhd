@@ -25,7 +25,6 @@ architecture behavioral of RISC_V_PROCESSOR is
 		  o_rs2         	: out std_logic_vector(4 downto 0);
 		  o_imm		    	: out std_logic_vector(11 downto 0);
 		  o_rd          	: out std_logic_vector(4 downto 0);
-	--	  o_read_to_LSU 	: out std_logic;
 		  o_write_to_LSU 	: out std_logic;
 		  o_LSU_code		: out std_logic_vector(16 downto 0);
 		  o_LSU_code_post	: out std_logic_vector(16 downto 0);
@@ -182,12 +181,7 @@ architecture behavioral of RISC_V_PROCESSOR is
 
   signal wb_result_src 			: std_logic_vector(1 downto 0);
   signal wb_result				: std_logic_vector(31 downto 0);
-  signal wb_regWrite				: std_logic;
-  
-  signal read_to_LSU   : std_logic;
-
-  signal csr_write    : std_logic_vector(31 downto 0);  
-  
+ 
   signal write_enable_lsu_to_lsumem 				: std_logic;
   signal write_enable_lsumem_to_datamem 			: std_logic;	
   signal write_enable_lsu_to_regfile 				: std_logic;
@@ -196,10 +190,8 @@ architecture behavioral of RISC_V_PROCESSOR is
   signal addr_lsumem_to_datamem	:  std_logic_vector (15 downto 0);
   signal write_lsu_to_lsumem  :  std_logic_vector (31 downto 0); 
   
-  signal write_enable_datamem_to_csr :  std_logic;
   signal regfile_number : std_logic_vector(4 downto 0);
   
-  signal addr_lsu_to_memory 	: std_logic_vector (15 downto 0);
   signal data_lsu_to_memory	: std_logic_vector (31 downto 0);
   
   signal src_decoder_to_lsu 	: std_logic;

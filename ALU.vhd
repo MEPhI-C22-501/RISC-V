@@ -43,8 +43,13 @@ architecture ALU_arch of ALU is
     constant MULHU_OP  : std_logic_vector := "00000010110110011";
 
     signal result_r : std_logic_vector(31 downto 0);
+	signal result_r_1: std_logic_vector(31 downto 0);
+	signal result_r_2: std_logic_vector(31 downto 0);
     
     begin
+	
+	o_result <= result_r_2;
+	
     process(i_clk, i_rst)
     begin
         if(i_rst = '1') then
@@ -80,6 +85,9 @@ architecture ALU_arch of ALU is
                 result_r <= multiplication_high_unsigned(i_first_operand, i_second_operand);
             end if;
         end if;
+		result_r_2 <= result_r_1;
+		result_r_1 <= result_r;
+		
     end process;
-    o_result <= result_r;
+
 end architecture;
