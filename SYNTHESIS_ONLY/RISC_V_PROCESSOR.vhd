@@ -10,7 +10,14 @@ use work.register_file_pkg.all;
 entity RISC_V_PROCESSOR is
   port (
     i_clk : in std_logic;
-    i_rst : in std_logic
+    i_rst : in std_logic;
+	 
+	 i_datamem_src   : in  std_logic;
+    o_addr          : out  std_logic_vector(15 downto 0);
+    i_outer_data    : in std_logic_vector(31 downto 0);
+	 o_outer_data 	  : out  std_logic_vector(31 downto 0);
+	 o_outer_write_enable : out  std_logic
+	
   );
 end entity RISC_V_PROCESSOR;
 
@@ -147,11 +154,8 @@ architecture behavioral of RISC_V_PROCESSOR is
   );
   end component;
   
-
-	
-  
-  signal core_clock 				: std_logic :='0';
-  signal core_reset 				: std_logic :='0';
+  signal core_clock 				: std_logic;
+  signal core_reset 				: std_logic;
   
   
   signal instruction_command 	: std_logic_vector(31 downto 0);
@@ -170,7 +174,9 @@ architecture behavioral of RISC_V_PROCESSOR is
   signal alu_opcode				: std_logic_vector (16 downto 0);
   signal alu_result    			: std_logic_vector(31 downto 0);
 
+  signal datamem_WB_input 		: std_logic_vector(31 downto 0);
   signal datamem_result 		: std_logic_vector(31 downto 0);
+  signal outer_datamem_result 		: std_logic_vector(31 downto 0);
   signal CSR_result 				: std_logic_vector(31 downto 0);
   signal reg_file_input			: registers_array;
   signal reg_file_output		: registers_array;
@@ -188,11 +194,16 @@ architecture behavioral of RISC_V_PROCESSOR is
   signal csr_write    : std_logic_vector(31 downto 0);  
   
   signal write_enable_lsu_to_lsumem 				: std_logic;
-  signal write_enable_lsumem_to_datamem 			: std_logic;	
+  signal write_enable_lsumem_to_datamem 			: std_logic;
+  signal write_enable_datamem_input 				: std_logic;	 
   signal write_enable_lsu_to_regfile 				: std_logic;
   
   signal addr_lsu_to_lsumem	:  std_logic_vector (15 downto 0);
+  signal datamem_addr_input 			:  std_logic_vector (15 downto 0);
+
   signal addr_lsumem_to_datamem	:  std_logic_vector (15 downto 0);
+  signal outer_datamem_addr : std_logic_vector (15 downto 0);
+  
   signal write_lsu_to_lsumem  :  std_logic_vector (31 downto 0); 
   
   signal write_enable_datamem_to_csr :  std_logic;
@@ -200,14 +211,14 @@ architecture behavioral of RISC_V_PROCESSOR is
   
   signal addr_lsu_to_memory 	: std_logic_vector (15 downto 0);
   signal data_lsu_to_memory	: std_logic_vector (31 downto 0);
+  signal datamem_input 			: std_logic_vector (31 downto 0);
   
   signal src_decoder_to_lsu 	: std_logic;
   signal addr_lsu_to_CSR		: std_logic_vector(11 downto 0);
-  
+  signal datamem_src:  std_logic := '1';
 begin
 	
-	core_clock <= i_clk;
-	core_reset <= i_rst;
+
 
   decoder_inst : command_decoder_v1  port map ( 
 	i_clk           => core_clock,--
@@ -293,7 +304,6 @@ begin
     i_registers_array             	=> reg_file_input,--
 	 i_registers_number 					=> regfile_number,--
 	 i_registers_write_enable			=> write_enable_lsu_to_regfile,--
-	 
     o_program_counter        			=> PC_regfile_to_lsu,   --
     o_registers_array              	=> reg_file_output--
 	 
@@ -303,9 +313,9 @@ begin
   datamem_inst : DataMemory port map (
 	 i_clk        			=> core_clock, --
     i_rst        			=> core_reset, --
-    i_write_enable 		=> write_enable_lsumem_to_datamem, --
-    i_addr 			=> addr_lsumem_to_datamem, --
-    i_write_data 			=> data_lsu_to_memory,-- 
+    i_write_enable 		=> write_enable_lsumem_to_datamem, --write_enable_datamem_input, --
+    i_addr 					=> datamem_addr_input, --
+    i_write_data 			=> datamem_input,-- 
 	  
     o_read_data 			=> datamem_result --
   );
@@ -321,12 +331,41 @@ begin
     i_clk          => core_clock, --
     i_rst          => core_reset, --
     
-	 i_datamem_result    => datamem_result,  --
+	 i_datamem_result    => datamem_WB_input,  --
 	 i_CSR_result			=> CSR_result, --
     i_ALU_result    => alu_result, --
     i_result_src    => wb_result_src,  --   
 	 
     o_result       => wb_result --
   );
+  
+  	core_clock <= i_clk;
+	core_reset <= i_rst;
+	
+--	datamem_src <= i_datamem_src; 
+--	o_addr <=  wb_result; --datamem_result;--addr_lsumem_to_datamem;
+	datamem_addr_input <= addr_lsumem_to_datamem;
+	o_outer_write_enable <= write_enable_lsumem_to_datamem;
+	
+--	write_enable_datamem_input <= write_enable_lsumem_to_datamem; 
+	datamem_input <= data_lsu_to_memory;
+	o_outer_data <= data_lsu_to_memory;
+	
+	datamem_src <= i_datamem_src;
 
+	process (i_clk, i_rst, datamem_src, i_outer_data, datamem_result, wb_result)
+	begin
+	   if i_rst = '1' then  
+        o_addr <= (others => '0');
+   elsif(rising_edge(i_clk)) then 
+			if (datamem_src = '0') then -- внутри
+				datamem_WB_input <= datamem_result;
+				o_addr <= (others => '0');
+			else  
+				datamem_WB_input <= i_outer_data;   -- снаружи
+				o_addr <=  addr_lsumem_to_datamem;
+			end if;
+		end if;
+	end process;
+	
 end architecture behavioral;

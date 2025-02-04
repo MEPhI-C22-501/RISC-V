@@ -14,7 +14,7 @@ entity DataMemory is
 end DataMemory;
 
 architecture DataMemory_beh of DataMemory is
-    type memory_array is array (0 to 65535) of std_logic_vector(31 downto 0);
+    type memory_array is array (0 to 8191) of std_logic_vector(31 downto 0);
 
     signal memory : memory_array := (others => (others => '0'));
     signal data_r : std_logic_vector(31 downto 0);
@@ -31,8 +31,10 @@ begin
 	if i_rst = '1' then
 		data_r <= (others => '0');
 	elsif rising_edge(i_clk) then
-            if i_write_enable = '0' then
+            if i_write_enable = '0' and i_addr(15 downto 13) = "000" then
                 data_r <= memory(to_integer(unsigned(i_addr)));
+	    else
+		data_r <= (others => '0');
             end if;
         end if;
     end process;
@@ -40,7 +42,7 @@ begin
     process(i_clk, i_rst)
     begin
 	if rising_edge(i_clk) then
-            if i_write_enable = '1' then
+            if i_write_enable = '1' and i_addr(15 downto 13) = "000" then
                 memory(to_integer(unsigned(i_addr))) <= i_write_data;
             end if;
         end if;

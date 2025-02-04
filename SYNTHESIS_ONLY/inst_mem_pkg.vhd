@@ -6,12 +6,12 @@ use STD.TEXTIO.ALL;
 package inst_mem_pkg is
 	type memory_array is array (0 to 65535) of std_logic_vector(7 downto 0);
     	type inst_array is array (0 to 65535) of std_logic_vector(31 downto 0);
-	function string_to_int(x_str : string := "0"; radix : positive range 2 to 36 := 10) return integer;
+	function string_to_int(x_str : string := "004185b3"; radix : positive range 2 to 36 := 10) return integer;
 	function read_hex_from_file(file_name: string) return inst_array;
 end inst_mem_pkg;
 
 package body inst_mem_pkg is
-	function string_to_int(x_str : string := "0"; radix : positive range 2 to 36 := 10) return integer is
+	function string_to_int(x_str : string := "004185b3"; radix : positive range 2 to 36 := 10) return integer is
     constant STR_LEN          : integer := x_str'length;
     
     variable chr_val          : integer;

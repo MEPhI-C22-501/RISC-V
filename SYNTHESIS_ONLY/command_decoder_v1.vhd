@@ -12,7 +12,7 @@ entity command_decoder_v1 is
 		  o_rs2         				: out std_logic_vector(4 downto 0);
 		  o_imm		    				: out std_logic_vector(11 downto 0);
 		  o_rd          				: out std_logic_vector(4 downto 0);
-		  o_read_to_LSU 				: out std_logic;
+	--	  -- o_read_to_LSU 				: out std_logic;
 		  o_write_to_LSU 				: out std_logic;
 		  o_LSU_code					: out std_logic_vector(16 downto 0);
 		  o_LSU_code_post				: out std_logic_vector(16 downto 0);
@@ -45,7 +45,7 @@ begin
 		o_rs2 <= (others => '0');
 		o_imm <= (others => '0');
 		o_rd <= (others => '0');
-		o_read_to_LSU <= '0';
+	--	-- o_read_to_LSU <= '0';
 		o_LSU_code <= (others => '0');
 		o_LSU_code_post <= (others => '0');
 		o_LSU_reg_or_memory_flag <= '0';
@@ -74,13 +74,13 @@ begin
 			 i_instr(6 downto 0) = "0010011" or
 			 i_instr(6 downto 0) = "0100011"
 		) then
-			 o_read_to_LSU <= '0';
+		--	 -- o_read_to_LSU <= '0';
 			 reg_stage_LSU_1(22) <= '0';
 		end if;
 		
 		-- R-type
 		if (i_instr(6 downto 0) = "0110011") then
-			 o_read_to_LSU <= '1';
+	--		 -- o_read_to_LSU <= '1';
 		end if;
 		
 		if (i_instr(6 downto 0) = "0110011") then
@@ -124,7 +124,7 @@ begin
 		end if;
 		
 		if (i_instr(6 downto 0) = "0000011" or i_instr(6 downto 0) = "0010011") then
-			 o_read_to_LSU <= '1';
+		--	 -- o_read_to_LSU <= '1';
 		end if;
 		
 		if (i_instr(6 downto 0) = "0000011" or i_instr(6 downto 0) = "0010011") then
@@ -162,7 +162,7 @@ begin
 		
 		-- S-type
 		if (i_instr(6 downto 0) = "0100011") then
-			 o_read_to_LSU <= '1';
+			 -- o_read_to_LSU <= '1';
 		end if;
 
 		if (i_instr(6 downto 0) = "0100011") then
