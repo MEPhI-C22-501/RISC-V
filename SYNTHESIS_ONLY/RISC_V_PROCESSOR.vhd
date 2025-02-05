@@ -107,7 +107,7 @@ architecture behavioral of RISC_V_PROCESSOR is
   
     component InstructionMemory
 		generic (
-			file_path : string := "C:/RISC_V_TESTS/program.hex"
+			file_path : string := "C:/RISC_V_TESTS/program_p8k.hex"
 	);
 
 		port (

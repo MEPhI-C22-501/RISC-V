@@ -6,7 +6,7 @@ use work.inst_mem_pkg.all;
 
 entity InstructionMemory is
 	generic (
-		file_path : string := "C:/program.hex"
+		file_path : string := "C:/RISC_V_TESTS/program_p8k.hex"
 	);
 
     port (
@@ -20,6 +20,9 @@ end InstructionMemory;
 architecture inst_mem_beh of InstructionMemory is
 	signal mem : inst_array := read_hex_from_file(file_path);
 	signal read_data_r : std_logic_vector(31 downto 0);
+	attribute ramstyle: string;
+	attribute ramstyle of mem: signal is "M9K";
+
 	
 begin
 	o_read_data <= read_data_r;

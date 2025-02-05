@@ -4,8 +4,8 @@ use IEEE.NUMERIC_STD.ALL;
 use STD.TEXTIO.ALL;
 
 package inst_mem_pkg is
-	type memory_array is array (0 to 65535) of std_logic_vector(7 downto 0);
-    	type inst_array is array (0 to 65535) of std_logic_vector(31 downto 0);
+	type memory_array is array (0 to 4095) of std_logic_vector(7 downto 0);
+    	type inst_array is array (0 to 4095) of std_logic_vector(31 downto 0);
 	function string_to_int(x_str : string := "004185b3"; radix : positive range 2 to 36 := 10) return integer;
 	function read_hex_from_file(file_name: string) return inst_array;
 end inst_mem_pkg;

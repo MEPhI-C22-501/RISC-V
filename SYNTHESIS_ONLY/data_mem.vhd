@@ -14,7 +14,7 @@ entity DataMemory is
 end DataMemory;
 
 architecture DataMemory_beh of DataMemory is
-    type memory_array is array (0 to 8191) of std_logic_vector(31 downto 0);
+    type memory_array is array (0 to 4095) of std_logic_vector(31 downto 0);
 
     signal memory : memory_array := (others => (others => '0'));
     signal data_r : std_logic_vector(31 downto 0);
